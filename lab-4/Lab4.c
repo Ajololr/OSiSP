@@ -29,6 +29,7 @@ void handler1(int sig, siginfo_t *info, void *ucontext){
 	static int recieved = 0;
 	recieved++;
 	printf("1 %d %d получил USR2 %ld\n", getpid(), getppid(), getTime());
+	fflush(stdout);
 
 	if (recieved == 101){
 		if (kill(-pid4, SIGTERM) == -1) printErr(module, strerror(errno), NULL);
@@ -36,11 +37,13 @@ void handler1(int sig, siginfo_t *info, void *ucontext){
 		int children = 5;
 		while (children--) wait(NULL);
 		printf("%d %d завершил работу после %d-го сигнала SIGUSR1 и %d-го сигнала SIGUSR2\n", getpid(), getppid(), X, Y);
+		fflush(stdout);
 		exit(0);
 	}
 	else {
 		if (kill(-pid4, SIGUSR1) == -1) printErr(module, strerror(errno), NULL);
 		printf("1 %d %d послал USR1 %ld\n", getpid(), getppid(), getTime());
+		fflush(stdout);
 		X += 3;
 	}
 }
@@ -49,25 +52,30 @@ void handler2(int sig, siginfo_t *info, void *ucontext){
 	printf("2 %d %d получил USR1 %ld\n", getpid(), getppid(), getTime());
 	if (kill(-pid5, SIGUSR2) == -1) printErr(module, strerror(errno), NULL);
 	printf("2 %d %d послал USR2 %ld\n", getpid(), getppid(), getTime());
+	fflush(stdout);
 	Y += 2;
 }
 
 void handler3(int sig, siginfo_t *info, void *ucontext){
 	printf("3 %d %d получил USR1 %ld\n", getpid(), getppid(), getTime());
+	fflush(stdout);
 }
 
 void handler4(int sig, siginfo_t *info, void *ucontext){
 	printf("4 %d %d получил USR1 %ld\n", getpid(), getppid(), getTime());
+	fflush(stdout);
 }
 
 void handler5(int sig, siginfo_t *info, void *ucontext){
 	printf("5 %d %d получил USR2 %ld\n", getpid(), getppid(), getTime());
+	fflush(stdout);
 }
 
 void handler6(int sig, siginfo_t *info, void *ucontext){
 	printf("6 %d %d получил USR2 %ld\n", getpid(), getppid(), getTime());
 	if (kill(pid7, SIGUSR1) == -1) printErr(module, strerror(errno), NULL);
 	printf("6 %d %d послал USR1 %ld\n", getpid(), getppid(), getTime());
+	fflush(stdout);
 	X++;
 }
 
@@ -75,6 +83,7 @@ void handler7(int sig, siginfo_t *info, void *ucontext){
 	printf("7 %d %d получил USR1 %ld\n", getpid(), getppid(), getTime());
 	if (kill(pid8, SIGUSR1) == -1) printErr(module, strerror(errno), NULL);
 	printf("7 %d %d послал USR1 %ld\n", getpid(), getppid(), getTime());
+	fflush(stdout);
 	X++;
 }
 
@@ -82,26 +91,31 @@ void handler8(int sig, siginfo_t *info, void *ucontext){
 	printf("8 %d %d получил USR1 %ld\n", getpid(), getppid(), getTime());
 	if (kill(pid1, SIGUSR2) == -1) printErr(module, strerror(errno), NULL);
 	printf("8 %d %d послал USR1 %ld\n", getpid(), getppid(), getTime());
+	fflush(stdout);
 	Y++;
 }
 
 void handlerTerm2(int sig, siginfo_t *info, void *ucontext){
 	printf("%d %d завершил работу после %d-го сигнала SIGUSR1 и %d-го сигнала SIGUSR2\n", getpid(), getppid(), X, Y);
+	fflush(stdout);
 	exit(0);
 }
 
 void handlerTerm3(int sig, siginfo_t *info, void *ucontext){
 	printf("%d %d завершил работу после %d-го сигнала SIGUSR1 и %d-го сигнала SIGUSR2\n", getpid(), getppid(), X, Y);
+	fflush(stdout);
 	exit(0);
 }
 
 void handlerTerm4(int sig, siginfo_t *info, void *ucontext){
 	printf("%d %d завершил работу после %d-го сигнала SIGUSR1 и %d-го сигнала SIGUSR2\n", getpid(), getppid(), X, Y);
+	fflush(stdout);
 	exit(0);
 }
 
 void handlerTerm5(int sig, siginfo_t *info, void *ucontext){
 	printf("%d %d завершил работу после %d-го сигнала SIGUSR1 и %d-го сигнала SIGUSR2\n", getpid(), getppid(), X, Y);
+	fflush(stdout);
 	exit(0);
 }
 
@@ -111,16 +125,19 @@ void handlerTerm6(int sig, siginfo_t *info, void *ucontext){
 	int children = 2;
 	while (children--) wait(NULL);
 	printf("%d %d завершил работу после %d-го сигнала SIGUSR1 и %d-го сигнала SIGUSR2\n", getpid(), getppid(), X, Y);
+	fflush(stdout);
 	exit(0);
 }
 
 void handlerTerm7(int sig, siginfo_t *info, void *ucontext){
 	printf("%d %d завершил работу после %d-го сигнала SIGUSR1 и %d-го сигнала SIGUSR2\n", getpid(), getppid(), X, Y);
+	fflush(stdout);
 	exit(0);
 }
 
 void handlerTerm8(int sig, siginfo_t *info, void *ucontext){
 	printf("%d %d завершил работу после %d-го сигнала SIGUSR1 и %d-го сигнала SIGUSR2\n", getpid(), getppid(), X, Y);
+	fflush(stdout);
 	exit(0);
 }
 
@@ -335,7 +352,6 @@ int main(int argc, char *argv[], char *envp[]){
 	}
 
 	if (getpid() == pid6){
-		printf("%d\n", pid7);
 		if (setpgid(pid7, pid7) == -1){
 			printErr(module, strerror(errno), NULL);
 			exit(1);
